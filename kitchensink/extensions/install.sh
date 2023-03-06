@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Running install.sh"
+echo ">>>>>>> Running install.sh <<<<<<"
 echo ${injected_dir}
 if [ "${SCRIPT_DEBUG}" = "true" ] ; then
     set -x
@@ -9,3 +9,5 @@ fi
 injected_dir=$1
 source /usr/local/s2i/install-common.sh
 configure_drivers ${injected_dir}/drivers.env
+
+${JBOSS_HOME}/bin/jboss-cli.sh --file="${injected_dir}/config-system-properties.cli"
