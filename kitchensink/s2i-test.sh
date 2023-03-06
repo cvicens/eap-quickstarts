@@ -26,11 +26,9 @@ oc annotate secret github-creds 'build.openshift.io/source-secret-match-uri-1=ht
 
 oc new-app --template=eap72-basic-s2i -n ${PROJECT_NAME} \
   --as-deployment-config=false \
-  --build-env MAVEN_SETTINGS_XML="/tmp/src/ext-lib/m2/settings.xml" \
-  --build-env ARTIFACT_DIR="arco-saer-app/arco-saer-app-ear/target" \
-  --build-env MAVEN_ARGS="-e -P openshift,linea-singleton,linea -DskipTests -Dcom.redhat.xpaas.repo.redhatga clean install" \
- -p APPLICATION_NAME=arco-saer-app \
+  --build-env MAVEN_ARGS_APPEND="-Dcom.redhat.xpaas.repo.jbossorg" \
+ -p APPLICATION_NAME=kitchensink-app \
  -p IMAGE_STREAM_NAMESPACE=${PROJECT_NAME} \
- -p SOURCE_REPOSITORY_URL=https://github.com/cvicens/arco-saer-cde-mig \
- -p SOURCE_REPOSITORY_REF=s2i \
- -p CONTEXT_DIR=.
+ -p SOURCE_REPOSITORY_URL=https://github.com/cvicens/eap-quickstarts \
+ -p SOURCE_REPOSITORY_REF=7.4.x \
+ -p CONTEXT_DIR=kitchensink

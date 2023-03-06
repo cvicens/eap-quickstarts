@@ -1,4 +1,4 @@
-embed-server --std-out=echo --server-config=standalone-openshift.xml
+embed-server --std-out=echo --server-config=my-config.xml --empty-config
 
 :whoami
 
@@ -13,5 +13,7 @@ embed-server --std-out=echo --server-config=standalone-openshift.xml
 /system-property=KAFKASAER_SECURITY_PROTOCOL:add(value=SASL_PLAINTEXT)
 /system-property=KAFKASAER_SASL_MECHANISM:add(value=PLAIN)
 /system-property=KAFKASAER_SERDES_PROTOCOL_VERSION:add(value=1)
+
+stop-embedded-server
 
 quit

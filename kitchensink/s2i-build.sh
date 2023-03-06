@@ -10,5 +10,5 @@
 
 sudo /var/home/cvicensa/bin/s2i build . registry.redhat.io/jboss-eap-7/eap72-openshift:1.2 \
   --env CUSTOM_INSTALL_DIRECTORIES="extensions" \
-  --env MAVEN_ARGS_APPEND="-Dcom.redhat.xpaas.repo.jbossorg"
+  --env MAVEN_ARGS_APPEND="-Dcom.redhat.xpaas.repo.jbossorg" kitchensink:latest
 
