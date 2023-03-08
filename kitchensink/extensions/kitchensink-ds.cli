@@ -1,0 +1,5 @@
+embed-server --std-out=echo --server-config=standalone-openshift.xml
+
+/subsystem=datasources/data-source=kitchensink:add(jndi-name="java:jboss/jdbc/kitchensink",connection-url="jdbc:oracle:thin:@myoraclehost:1521:MYSID",driver-name=oracle,user-name=jboss,password=jboss,validate-on-match=true,valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker",exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleExceptionSorter")
+
+quit
