@@ -9,3 +9,6 @@ $JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_HOME/extensions/config-system-propert
 echo ">>>>>> Executing kitchensink-ds.cli <<<<<<<"
 $JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_HOME/extensions/kitchensink-ds.cli
 
+echo ">>>>>> Executing clean.cli <<<<<<<"
+$JBOSS_HOME/bin/jboss-cli.sh --file=$JBOSS_HOME/extensions/clean.cli
+

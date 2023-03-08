@@ -1,0 +1,8 @@
+embed-server --std-out=echo --server-config=standalone-openshift.xml
+
+if (outcome == success) of /subsystem=datasources/jdbc-driver=mysql:read-attribute(name=driver-name)
+    # Remove Driver
+    /subsystem=datasources/jdbc-driver=mysql:remove
+end-if
+
+quit
