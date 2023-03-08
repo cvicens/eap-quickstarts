@@ -11,11 +11,9 @@ for resource in \
   eap72-basic-s2i.json \
   eap72-https-s2i.json \
   eap72-sso-s2i.json
-
 do
-  oc apply -f https://raw.githubusercontent.com/jboss-container-images/jboss-eap-7-openshift-image/7.2.x/templates/${resource}
+  oc apply -f ./util/${resource}
 done
-
 
 oc create secret generic github-creds \
   --from-literal=username=cvicens \
