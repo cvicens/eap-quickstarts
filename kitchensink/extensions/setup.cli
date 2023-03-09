@@ -1,0 +1,19 @@
+
+embed-server --std-out=echo --server-config=standalone-openshift.xml
+
+/subsystem=logging/logger=saer-linea:add(use-parent-handlers=false)
+/subsystem=logging/logger=saer-linea:write-attribute(name=level, value=INFO)
+/subsystem=logging/logger=saer-linea:add-handler(name=CONSOLE)
+
+/subsystem=datasources/data-source=kitchensink:add(jndi-name="java:jboss/jdbc/kitchensink",connection-url="jdbc:postgresql://${env.DB_HOST}:${env.DB_PORT:5432}/${env.DB_NAME:kitchensink}",driver-name=postgresql,user-name=${env.DB_USERNAME},password=${env.DB_PASSWORD},validate-on-match=true,valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter")
+
+if (outcome == success) of /subsystem=datasources/jdbc-driver=mysql:read-attribute(name=driver-name)
+    # Remove Driver
+    /subsystem=datasources/jdbc-driver=mysql:remove
+end-if
+
+quit
+
+
+              
+                

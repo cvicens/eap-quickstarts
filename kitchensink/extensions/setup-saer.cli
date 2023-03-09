@@ -1,0 +1,48 @@
+
+embed-server --std-out=echo --server-config=standalone-openshift.xml
+
+
+/system-property=KAFKASAER_TOPIC:add(value=${env.KAFKASAER_TOPIC:desarrollo_saer_circulacion})
+/system-property=KAFKASAER_TSL:add(value=${env.KAFKASAER_TSL:/tmp/truststore.jks})
+/system-property=KAFKASAER_TSP:add(value=${env.KAFKASAER_TSP:password})
+/system-property=KAFKASAER_KSL:add(value=${env.KAFKASAER_KSL:/tmp/truststore.jks})
+/system-property=KAFKASAER_KSP:add(value=${env.KAFKASAER_KSP:password})
+/system-property=KAFKASAER_KRB:add(value=${env.KAFKASAER_KRB:/tmp/krb5.conf})
+/system-property=KAFKASAER_KAFKA_BROKERS:add(value=${env.KAFKASAER_KAFKA_BROKERS:denton20-ser.metromadrid.net:9193,denton21-ser.metromadrid.net:9193,denton22-ser.metromadrid.net:9193})
+/system-property=KAFKASAER_SCHEMA_REG_URL:add(value=${env.KAFKASAER_SCHEMA_REG_URL:https://denton10-ser.metromadrid.net:7790/api/v1})
+/system-property=KAFKASAER_SECURITY_PROTOCOL:add(value=SASL_PLAINTEXT)
+/system-property=KAFKASAER_SASL_MECHANISM:add(value=PLAIN)
+/system-property=KAFKASAER_SERDES_PROTOCOL_VERSION:add(value=1)
+
+/core-service=management/security-realm=ApplicationRealm/server-identity=ssl:add(keystore-path=application.keystore, keystore-relative-to=jboss.server.config.dir, keystore-password=password, alias=server, key-password=password, generate-self-signed-certificate-host=localhost)
+
+/subsystem=security/security-domain=jaspitest:add(cache-type=default)
+/subsystem=security/security-domain=jaspitest/authentication=jaspi:add()
+/subsystem=security/security-domain=jaspitest/authentication=jaspi/login-module-stack=dummy:add()
+/subsystem=security/security-domain=jaspitest/authentication=jaspi/login-module-stack=dummy/login-module=dummy:add(code=Dummy, flag=optional)
+/subsystem=security/security-domain=jaspitest/authentication=jaspi/auth-module=jaspi:add(code=Dummy)
+
+/subsystem=security/security-domain=KafkaClient:add(cache-type=default)
+/subsystem=security/security-domain=KafkaClient/authentication=classic:add
+/subsystem=security/security-domain=KafkaClient/authentication=classic/login-module=1:add(code=com.sun.security.auth.module.Krb5LoginModule, flag=Required, module-options={storeKey=true, useKeyTab=true, refreshKrb5Config=false, keyTab=/kafka/ps10005.keytab, principal=ps10005@UNIX.ASI, serviceName=kafka, doNotPrompt=true, debug=true}
+
+/subsystem=security/security-domain=RegistryClient:add(cache-type=default)
+/subsystem=security/security-domain=RegistryClient/authentication=classic:add
+/subsystem=security/security-domain=RegistryClient/authentication=classic/login-module=1:add(code=com.sun.security.auth.module.Krb5LoginModule, flag=Required, module-options={storeKey=true, useKeyTab=true, refreshKrb5Config=false, keyTab=/kafka/ps10005.keytab, principal=ps10005@UNIX.ASI, doNotPrompt=true, debug=true}
+
+/subsystem=logging/logger=saer-linea:add(use-parent-handlers=false)
+/subsystem=logging/logger=saer-linea:write-attribute(name=level, value=INFO)
+/subsystem=logging/logger=saer-linea:add-handler(name=CONSOLE)
+
+/subsystem=datasources/data-source=kitchensink:add(jndi-name="java:jboss/jdbc/kitchensink",connection-url="jdbc:postgresql://${env.DB_HOST}:${env.DB_PORT:5432}/${env.DB_NAME:kitchensink}",driver-name=postgresql,user-name=${env.DB_USERNAME},password=${env.DB_PASSWORD},validate-on-match=true,valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter")
+
+if (outcome == success) of /subsystem=datasources/jdbc-driver=mysql:read-attribute(name=driver-name)
+    # Remove Driver
+    /subsystem=datasources/jdbc-driver=mysql:remove
+end-if
+
+quit
+
+
+              
+                
